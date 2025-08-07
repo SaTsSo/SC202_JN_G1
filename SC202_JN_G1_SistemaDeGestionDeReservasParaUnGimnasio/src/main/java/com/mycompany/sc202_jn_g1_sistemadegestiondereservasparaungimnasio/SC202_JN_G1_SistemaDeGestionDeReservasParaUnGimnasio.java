@@ -14,12 +14,27 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
 
     public static void main(String[] args) {
         
+        Usuario [] usuarios = new Usuario [10];
+        
+        usuarios [0] = new Usuario (111111111, "samuel", 83.1, 19999999,"samuel@prueba.com", "tsai", 22);
+        usuarios [1] = new Usuario (222222222, "matias", 74.2, 28888888,"matias@prueba.com", "Cabalceta", 18);
+        usuarios [2] = new Usuario (333333333, "santiago", 65.3, 37777777,"santiago@prueba.com", "paniagua", 19);
+        usuarios [3] = new Usuario (444444444, "jimena", 60.4, 466666666,"jimena@prueba.com", "lopez", 20);
+        usuarios [4] = new Usuario (1, "vacio", 1.1, 1,"vacio@prueba.com", "vacio", 1);
+        usuarios [5] = new Usuario (1, "vacio", 1.1, 1,"vacio@prueba.com", "vacio", 1);
+        usuarios [6] = new Usuario (1, "vacio", 1.1, 1,"vacio@prueba.com", "vacio", 1);
+        usuarios [7] = new Usuario (1, "vacio", 1.1, 1,"vacio@prueba.com", "vacio", 1);
+        usuarios [8] = new Usuario (1, "vacio", 1.1, 1,"vacio@prueba.com", "vacio", 1);
+        usuarios [9] = new Usuario (1, "vacio", 1.1, 1,"vacio@prueba.com", "vacio", 1);
+        
         boolean salir = false;
 
         //Inicio de sesion
-        String verificarUsuario = JOptionPane.showInputDialog("Ingrese su correo de usuario: ");
-        String verificarContraseña = JOptionPane.showInputDialog("Ingrese su contraseña: ");
+        String Usuario = JOptionPane.showInputDialog("Ingrese su correo de usuario: ");
+        String Contraseña = JOptionPane.showInputDialog("Ingrese su contraseña: ");
         //VALIDAR LAS CREDENCIALES
+        
+        
 
         do {
             //Menu principal
