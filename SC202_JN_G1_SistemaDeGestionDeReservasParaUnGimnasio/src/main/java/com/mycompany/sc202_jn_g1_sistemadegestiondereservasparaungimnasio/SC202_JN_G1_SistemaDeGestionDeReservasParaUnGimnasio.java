@@ -11,21 +11,148 @@ import javax.swing.JOptionPane;
  * @author samim
  */
 public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
+    //Agregado por Jimena - para la clase usuario
+    public static Usuario [] usuarios = new Usuario [10];
 
     public static void main(String[] args) {
         
-        Usuario [] usuarios = new Usuario [10];
         
         usuarios [0] = new Usuario ("111111111", "samuel", 83.1, "19999999","samuel@prueba.com", "tsai", 22);
         usuarios [1] = new Usuario ("222222222", "matias", 74.2, "28888888","matias@prueba.com", "Cabalceta", 18);
         usuarios [2] = new Usuario ("333333333", "santiago", 65.3, "37777777","santiago@prueba.com", "paniagua", 19);
         usuarios [3] = new Usuario ("444444444", "jimena", 60.4, "466666666","jimena@prueba.com", "lopez", 20);
-        usuarios [4] = new Usuario ("1", "vacio", 1.1, "1","vacio@prueba.com", "vacio", 1);
-        usuarios [5] = new Usuario ("1", "vacio", 1.1, "1","vacio@prueba.com", "vacio", 1);
-        usuarios [6] = new Usuario ("1", "vacio", 1.1, "1","vacio@prueba.com", "vacio", 1);
-        usuarios [7] = new Usuario ("1", "vacio", 1.1, "1","vacio@prueba.com", "vacio", 1);
-        usuarios [8] = new Usuario ("1", "vacio", 1.1, "1","vacio@prueba.com", "vacio", 1);
-        usuarios [9] = new Usuario ("1", "vacio", 1.1, "1","vacio@prueba.com", "vacio", 1);
+        for (int i=4;i<usuarios.length;i++) {
+            usuarios[i] = new Usuario("1","vacio",1.1,"1","vacio@prueba.com","vacio",1);
+        }
+        
+        while (true) {
+            String op = JOptionPane.showInputDialog(
+                "=== GIMNASIO Super Fit===\n" +
+                "1) Registrar usuario\n" +
+                "2) Editar usuario (por cédula)\n" +
+                "3) Login (cédula o correo)\n" +
+                "4) Listar usuarios\n" +
+                "0) Salir\n" +
+                "Elige opción:"
+            );
+            if (op == null) break;
+            int opcion = toInt(op, -1);
+            if (opcion == 0) break;
+
+            switch (opcion) {
+                case 1: registrarUI();  break;
+                case 2: editarUI();     break;
+                case 3: loginUI();      break;
+                case 4: listarUI();     break;
+                default: JOptionPane.showMessageDialog(null, "Opción inválida.");
+            }
+        }
+    }
+    
+    private static void registrarUI() {
+        String ced = in("Cédula:");
+        if (isBlank(ced)) return;
+        String nom = in("Nombre:");
+        if (isBlank(nom)) return;
+        String tel = in("Teléfono:");
+        if (isBlank(tel)) return;
+        String email = in("Correo:");
+        if (isBlank(email)) return;
+        String pass = in("Contraseña:");
+        if (isBlank(pass)) return;
+       
+
+        Usuario nuevo = new Usuario(ced, nom, 0.0, tel, email, pass, 0); 
+        boolean ok = Usuario.registrar(usuarios, nuevo);
+        JOptionPane.showMessageDialog(null, ok ? "Registrado." : "No se pudo registrar (duplicado o sin espacio).");
+    }
+        private static void editarUI() {
+        String ced = in("Cédula del usuario a editar:");
+        if (isBlank(ced)) return;
+
+        int idx = Usuario.buscarPorCedula(usuarios, ced);
+        if (idx == -1) { JOptionPane.showMessageDialog(null, "No existe esa cédula."); return; }
+
+        Usuario u = usuarios[idx];
+        JOptionPane.showMessageDialog(null, "Actual:\n" + u.resumen());
+
+        String nuevoNombre = vacioANull(in("Nuevo nombre (vacío = no cambiar):"));
+        String nuevoTelefono = vacioANull(in("Nuevo teléfono (vacío = no cambiar):"));
+        String nuevoCorreo = vacioANull(in("Nuevo correo (vacío = no cambiar):"));
+        String nuevaPass = vacioANull(in("Nueva contraseña (vacío = no cambiar):"));
+        String nuevoPesoS = vacioANull(in("Nuevo peso (número, vacío = no cambiar):"));
+        String activoS = vacioANull(in("Activo? (S/N, vacío = no cambiar):"));
+
+        Double nuevoPeso = (nuevoPesoS == null) ? null : toDouble(nuevoPesoS, u.getPeso());
+        Boolean nuevoActivo = null;
+        if (activoS != null) {
+            char c = Character.toLowerCase(activoS.charAt(0));
+            nuevoActivo = (c == 's');
+        }
+
+        boolean ok = Usuario.editarPorCedula(usuarios, ced, nuevoNombre, nuevoPeso, nuevoTelefono,
+                                             nuevoCorreo, nuevaPass, nuevoActivo);
+        JOptionPane.showMessageDialog(null, ok ? "Editado." : "No se pudo editar (correo duplicado u otro problema).");
+    }
+        
+        private static void loginUI() {
+        String user = in("Usuario (cédula o correo):");
+        if (isBlank(user)) return;
+        String pass = in("Contraseña:");
+        if (isBlank(pass)) return;
+
+        Usuario ok = Usuario.login(usuarios, user, pass);
+        JOptionPane.showMessageDialog(null, (ok != null) ? "Login OK. Bienvenido/a " + ok.getNombre()
+                                                         : "Login fallido.");
+    }
+        
+        private static void listarUI() {
+        StringBuilder sb = new StringBuilder();
+        for (int i=0;i<usuarios.length;i++) {
+            Usuario u = usuarios[i];
+            if (u != null && !(u.getCedula().equals("1") && u.getNombre().equalsIgnoreCase("vacio"))) {
+                sb.append(i).append(": ").append(u.resumen()).append("\n");
+            }
+        }
+        JOptionPane.showMessageDialog(null, sb.length()>0 ? sb.toString() : "No hay usuarios (solo vacíos).");
+    }
+        private static String in(String msg) { return JOptionPane.showInputDialog(msg); }
+    private static boolean isBlank(String s) {
+        if (s == null) return true;
+        for (int i=0;i<s.length();i++) {
+            char c = s.charAt(i);
+            if (c!=' ' && c!='\t' && c!='\n' && c!='\r') return false;
+        }
+        return true;
+    } 
+    private static String vacioANull(String s) { return isBlank(s) ? null : s; }
+
+    private static int toInt(String s, int def) {
+        if (s == null || s.length()==0) return def;
+        int sign = 1, i = 0, n = s.length(), val = 0;
+        if (s.charAt(0)=='-'){ sign=-1; i=1; }
+        for (; i<n; i++) {
+            char c = s.charAt(i);
+            if (c<'0' || c>'9') return def;
+            val = val*10 + (c-'0');
+        }
+        return sign*val;
+    } 
+    
+    private static double toDouble(String s, double def) {
+        if (s == null || s.length()==0) return def;
+        boolean dot = false; int sign=1, i=0; double val=0, div=1;
+        if (s.charAt(0)=='-'){ sign=-1; i=1; }
+        for (; i<s.length(); i++) {
+            char c=s.charAt(i);
+            if (c=='.') { if (dot) return def; dot=true; continue; }
+            if (c<'0'||c>'9') return def;
+            if (!dot) val = val*10 + (c-'0');
+            else { div *= 10; val += (c-'0')/div; }
+        }
+        return sign*val;
+    }    //Agregado por Jimena - para la clase usuario
+
         
         boolean salir = false;
         
@@ -38,7 +165,7 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
 
             String mensajePrincipal = "";
             mensajePrincipal += "******************************************\n";
-            mensajePrincipal += "¡Vienvenido al Gymnacio Super Fit!\n";
+            mensajePrincipal += "¡Bienvenido al Gimnasio Super Fit!\n";
             mensajePrincipal += "******************************************\n\n";
             mensajePrincipal += "Por favor ingrese el numero de la accion que desea realizar:\n";
             mensajePrincipal += "1. Gestion de usuarios.\n";
