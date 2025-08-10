@@ -19,7 +19,7 @@ public class reserva {
         return usuario;
     }
 
-    public void setUsuario(UsuArio usuario) {
+    public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
@@ -34,3 +34,4 @@ public class reserva {
     public String mostrarReserva() {
         return "ID: " + idReserva + "\nUsuario: " + usuario.getNombre() + "\nHorario: " + horario.mostrarHorario();
     }
+}
