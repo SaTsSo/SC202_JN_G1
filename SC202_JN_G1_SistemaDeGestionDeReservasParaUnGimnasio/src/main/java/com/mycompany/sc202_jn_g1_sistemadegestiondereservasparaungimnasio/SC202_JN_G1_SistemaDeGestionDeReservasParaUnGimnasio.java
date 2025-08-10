@@ -25,136 +25,172 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
             usuarios[i] = new Usuario("1","vacio",1.1,"1","vacio@prueba.com","vacio",1);
         }
         
-        while (true) {
-            String op = JOptionPane.showInputDialog(
-                "=== GIMNASIO Super Fit===\n" +
+            menuPrincipal();
+    }
+        
+        private static void menuPrincipal() {
+        boolean salir = false;
+
+        while (!salir) {
+            String opcion = JOptionPane.showInputDialog(
+                "=== GIMNASIO: USUARIOS ===\n" +
                 "1) Registrar usuario\n" +
                 "2) Editar usuario (por cédula)\n" +
                 "3) Login (cédula o correo)\n" +
-                "4) Listar usuarios\n" +
                 "0) Salir\n" +
-                "Elige opción:"
+                "Opción:"
             );
-            if (op == null) break;
-            int opcion = toInt(op, -1);
-            if (opcion == 0) break;
+            if (opcion == null) break;
 
-            switch (opcion) {
-                case 1: registrarUI();  break;
-                case 2: editarUI();     break;
-                case 3: loginUI();      break;
-                case 4: listarUI();     break;
-                default: JOptionPane.showMessageDialog(null, "Opción inválida.");
+            if (opcion.equals("1")) {
+                registrarUI();
+            } else if (opcion.equals("2")) {
+                editarUI();
+            } else if (opcion.equals("3")) {
+                loginUI();
+            } else if (opcion.equals("0")) {
+                salir = true;
+            } else {
+                JOptionPane.showMessageDialog(null, "Opción inválida.");
             }
         }
     }
-    
-    private static void registrarUI() {
-        String ced = in("Cédula:");
-        if (isBlank(ced)) return;
-        String nom = in("Nombre:");
-        if (isBlank(nom)) return;
-        String tel = in("Teléfono:");
-        if (isBlank(tel)) return;
-        String email = in("Correo:");
-        if (isBlank(email)) return;
-        String pass = in("Contraseña:");
-        if (isBlank(pass)) return;
-       
+        
+        private static void registrarUI() {
+        String ced = JOptionPane.showInputDialog("Cédula:");
+        if (vacio(ced)) return;
+        if (Usuario.existeCedula(usuarios, ced)) {
+            JOptionPane.showMessageDialog(null, "Ya existe un usuario con esa cédula.");
+            return;
+        }
+        
+        String nom = JOptionPane.showInputDialog("Nombre:");
+        if (vacio(nom)) return;
 
-        Usuario nuevo = new Usuario(ced, nom, 0.0, tel, email, pass, 0); 
+        String tel = JOptionPane.showInputDialog("Teléfono:");
+        if (vacio(tel)) return;
+
+        String cor = JOptionPane.showInputDialog("Correo:");
+        if (vacio(cor)) return;
+        if (Usuario.existeCorreo(usuarios, cor)) {
+            JOptionPane.showMessageDialog(null, "Ya existe un usuario con ese correo.");
+            return;
+        }
+        
+        String pesoTxt = JOptionPane.showInputDialog("Peso (ej. 70.5):");
+        if (vacio(pesoTxt)) return;
+        double peso = parseDouble(pesoTxt, -1);
+        if (peso <= 0) {
+            JOptionPane.showMessageDialog(null, "Peso inválido.");
+            return;
+        }
+        
+        String edadTxt = JOptionPane.showInputDialog("Edad (entero):");
+        if (vacio(edadTxt)) return;
+        int edad = parseInt(edadTxt, -1);
+        if (edad < 0) {
+            JOptionPane.showMessageDialog(null, "Edad inválida.");
+            return;
+        }
+        String pass = JOptionPane.showInputDialog("Contraseña:");
+        if (vacio(pass)) return;
+
+        Usuario nuevo = new Usuario(ced, nom, peso, tel, cor, pass, edad);
         boolean ok = Usuario.registrar(usuarios, nuevo);
-        JOptionPane.showMessageDialog(null, ok ? "Registrado." : "No se pudo registrar (duplicado o sin espacio).");
-    }
-        private static void editarUI() {
-        String ced = in("Cédula del usuario a editar:");
-        if (isBlank(ced)) return;
 
-        int idx = Usuario.buscarPorCedula(usuarios, ced);
-        if (idx == -1) { JOptionPane.showMessageDialog(null, "No existe esa cédula."); return; }
-
-        Usuario u = usuarios[idx];
-        JOptionPane.showMessageDialog(null, "Actual:\n" + u.resumen());
-
-        String nuevoNombre = vacioANull(in("Nuevo nombre (vacío = no cambiar):"));
-        String nuevoTelefono = vacioANull(in("Nuevo teléfono (vacío = no cambiar):"));
-        String nuevoCorreo = vacioANull(in("Nuevo correo (vacío = no cambiar):"));
-        String nuevaPass = vacioANull(in("Nueva contraseña (vacío = no cambiar):"));
-        String nuevoPesoS = vacioANull(in("Nuevo peso (número, vacío = no cambiar):"));
-        String activoS = vacioANull(in("Activo? (S/N, vacío = no cambiar):"));
-
-        Double nuevoPeso = (nuevoPesoS == null) ? null : toDouble(nuevoPesoS, u.getPeso());
-        Boolean nuevoActivo = null;
-        if (activoS != null) {
-            char c = Character.toLowerCase(activoS.charAt(0));
-            nuevoActivo = (c == 's');
+        if (ok) {
+            JOptionPane.showMessageDialog(null, "Usuario registrado correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo registrar (duplicado o sin espacio).");
         }
-
-        boolean ok = Usuario.editarPorCedula(usuarios, ced, nuevoNombre, nuevoPeso, nuevoTelefono,
-                                             nuevoCorreo, nuevaPass, nuevoActivo);
-        JOptionPane.showMessageDialog(null, ok ? "Editado." : "No se pudo editar (correo duplicado u otro problema).");
     }
-        
-        private static void loginUI() {
-        String user = in("Usuario (cédula o correo):");
-        if (isBlank(user)) return;
-        String pass = in("Contraseña:");
-        if (isBlank(pass)) return;
 
-        Usuario ok = Usuario.login(usuarios, user, pass);
-        JOptionPane.showMessageDialog(null, (ok != null) ? "Login OK. Bienvenido/a " + ok.getNombre()
-                                                         : "Login fallido.");
-    }
-        
-        private static void listarUI() {
-        StringBuilder sb = new StringBuilder();
-        for (int i=0;i<usuarios.length;i++) {
-            Usuario u = usuarios[i];
-            if (u != null && !(u.getCedula().equals("1") && u.getNombre().equalsIgnoreCase("vacio"))) {
-                sb.append(i).append(": ").append(u.resumen()).append("\n");
+        private static void editarUI() {
+        String ced = JOptionPane.showInputDialog("Cédula del usuario a editar:");
+        if (vacio(ced)) return;
+
+        Usuario actual = null;
+        for (int i = 0; i < usuarios.length; i++) {
+            if (usuarios[i] != null
+                    && !usuarios[i].getCedula().equals("1")
+                    && usuarios[i].getCedula().equals(ced)) {
+                actual = usuarios[i];
+                break;
             }
         }
-        JOptionPane.showMessageDialog(null, sb.length()>0 ? sb.toString() : "No hay usuarios (solo vacíos).");
-    }
-        private static String in(String msg) { return JOptionPane.showInputDialog(msg); }
-    private static boolean isBlank(String s) {
-        if (s == null) return true;
-        for (int i=0;i<s.length();i++) {
-            char c = s.charAt(i);
-            if (c!=' ' && c!='\t' && c!='\n' && c!='\r') return false;
+        if (actual == null) {
+            JOptionPane.showMessageDialog(null, "No existe esa cédula.");
+            return;
         }
-        return true;
-    } 
-    private static String vacioANull(String s) { return isBlank(s) ? null : s; }
-
-    private static int toInt(String s, int def) {
-        if (s == null || s.length()==0) return def;
-        int sign = 1, i = 0, n = s.length(), val = 0;
-        if (s.charAt(0)=='-'){ sign=-1; i=1; }
-        for (; i<n; i++) {
-            char c = s.charAt(i);
-            if (c<'0' || c>'9') return def;
-            val = val*10 + (c-'0');
-        }
-        return sign*val;
-    } 
-    
-    private static double toDouble(String s, double def) {
-        if (s == null || s.length()==0) return def;
-        boolean dot = false; int sign=1, i=0; double val=0, div=1;
-        if (s.charAt(0)=='-'){ sign=-1; i=1; }
-        for (; i<s.length(); i++) {
-            char c=s.charAt(i);
-            if (c=='.') { if (dot) return def; dot=true; continue; }
-            if (c<'0'||c>'9') return def;
-            if (!dot) val = val*10 + (c-'0');
-            else { div *= 10; val += (c-'0')/div; }
-        }
-        return sign*val;
-    }    //Agregado por Jimena - para la clase usuario
-
         
-        boolean salir = false;
+        JOptionPane.showMessageDialog(null, "Actual:\n" + actual.resumen());
+
+        String nuevoNombre   = JOptionPane.showInputDialog("Nuevo nombre (vacío = no cambiar):");
+        String nuevoPesoTxt  = JOptionPane.showInputDialog("Nuevo peso (vacío = no cambiar):");
+        String nuevoTelefono = JOptionPane.showInputDialog("Nuevo teléfono (vacío = no cambiar):");
+        String nuevoCorreo   = JOptionPane.showInputDialog("Nuevo correo (vacío = no cambiar):");
+        String nuevaPass     = JOptionPane.showInputDialog("Nueva contraseña (vacío = no cambiar):");
+        String nuevaEdadTxt  = JOptionPane.showInputDialog("Nueva edad (vacío = no cambiar):");
+        String activoTxt     = JOptionPane.showInputDialog("Activo? (S/N, vacío = no cambiar):");
+
+        Double  nuevoPeso = null;
+        if (!vacio(nuevoPesoTxt)) nuevoPeso = Double.valueOf(parseDouble(nuevoPesoTxt, -1));
+
+        Integer nuevaEdad = null;
+        if (!vacio(nuevaEdadTxt)) nuevaEdad = Integer.valueOf(parseInt(nuevaEdadTxt, -1));
+
+        Boolean nuevoActivo = null;
+        if (!vacio(activoTxt)) {
+            if (activoTxt.equalsIgnoreCase("S")) {
+                nuevoActivo = true;
+            } else if (activoTxt.equalsIgnoreCase("N")) {
+                nuevoActivo = false;
+        }
+    }
+        
+        if (vacio(nuevoNombre))   nuevoNombre = null;
+        if (vacio(nuevoTelefono)) nuevoTelefono = null;
+        if (vacio(nuevoCorreo))   nuevoCorreo = null;
+        if (vacio(nuevaPass))     nuevaPass = null;
+
+        boolean ok = Usuario.editar(usuarios, ced, nuevoNombre, nuevoPeso,
+                                    nuevoTelefono, nuevoCorreo, nuevaPass,
+                                    nuevaEdad, nuevoActivo);
+
+        if (ok) {
+            JOptionPane.showMessageDialog(null, "Editado correctamente.");
+        } else {
+            JOptionPane.showMessageDialog(null, "No se pudo editar (correo duplicado u otro problema).");
+        }
+    }
+
+        private static void loginUI() {
+        String user = JOptionPane.showInputDialog("Usuario (cédula o correo):");
+        if (vacio(user)) return;
+
+        String pass = JOptionPane.showInputDialog("Contraseña:");
+        if (vacio(pass)) return;
+
+        boolean ok = Usuario.login(usuarios, user, pass);
+
+        if (ok) {
+            JOptionPane.showMessageDialog(null, "Login OK. Bienvenido/a.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Login fallido.");
+        }
+    }
+        private static boolean vacio(String s) {
+            return s == null || s.length() == 0;
+    }
+        private static int parseInt(String s, int def) {
+            try { return Integer.parseInt(s); } catch (Exception e) { return def; }
+    }
+        private static double parseDouble(String s, double def) {
+            try { return Double.parseDouble(s); } catch (Exception e) { return def; }
+    }
+}
+    }
+    
         
         //Inicio de sesion
         ValidarInicioSesion validarInicioSesion = new ValidarInicioSesion(usuarios);

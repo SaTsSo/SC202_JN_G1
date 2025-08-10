@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.sc202_jn_g1_sistemadegestiondereservasparaungimnasio;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -93,94 +94,86 @@ public class Usuario {
     this.activo = activo;
     }
 
-    private static boolean strEq (String a, String b) {
-        if (a == null || b == null) return a == b;
-        if (a.length() != b.length()) return false;
-        for (int i = 0; i < a.length(); i++) if (a.charAt(i) !=b.charAt(i)) return false;
-        return true;
-     }
-    
-    private static char toLower(char c) {
-    return (c>='A'&&c<='Z')?(char)(c+32):c;}
-    private static boolean strEqIgnoreCase(String a, String b){
-        if (a == null || b == null) return a == b;
-        if (a.length() != b.length()) return false;
-        for (int i=0;i<a.length();i++) if (toLower(a.charAt(i))!=toLower(b.charAt(i))) return false;
-        return true;
-    }
-    
     private static boolean esVacio(Usuario u) {
-        if (u == null) return true;
-        boolean cedulaVacia = strEq(u.cedula, "1");
-        boolean nombreVacio = strEqIgnoreCase(u.nombre, "vacio");
-        return cedulaVacia && nombreVacio;
-    }
-
-    public static int buscarPorCedula(Usuario[] bd, String ced) {
-        if (bd == null || ced == null) return -1;
-        for (int i=0;i<bd.length;i++) {
-            if (bd[i]!=null && !esVacio(bd[i]) && strEq(bd[i].cedula, ced)) return i;
-        }
-        return -1;
+        return u != null
+            && "1".equals(u.getCedula())
+            && u.getNombre() != null
+            && u.getNombre().equalsIgnoreCase("vacio");
     }
     
-    public static int buscarPorCorreo(Usuario[] bd, String email) {
-        if (bd == null || email == null) return -1;
-        for (int i=0;i<bd.length;i++) {
-            if (bd[i]!=null && !esVacio(bd[i]) && strEqIgnoreCase(bd[i].correo, email)) return i;
-        }
-        return -1;
-    }
-    
-    public static boolean registrar(Usuario[] bd, Usuario nuevo) {
-        if (bd == null || nuevo == null) return false;
-        if (buscarPorCedula(bd, nuevo.cedula) != -1) return false;
-        if (buscarPorCorreo(bd, nuevo.correo) != -1) return false;
-
-        for (int i=0;i<bd.length;i++) {
-            if (bd[i] == null || esVacio(bd[i])) { bd[i] = nuevo; return true; }
+    public static boolean existeCedula(Usuario[] usuarios, String cedula) {
+        for (int i = 0; i < usuarios.length; i++) {
+            if (usuarios[i] != null && usuarios[i].getCedula().equals(cedula)) {
+                return true;
+            }
         }
         return false;
     }
     
-    public static boolean editarPorCedula(Usuario[] bd, String cedulaClave,
-                                          String nuevoNombre, Double nuevoPeso,
-                                          String nuevoTelefono, String nuevoCorreo,
-                                          String nuevaContrasena,
-                                          Boolean nuevoActivo) {
-        if (bd == null || cedulaClave == null) return false;
-        int idx = buscarPorCedula(bd, cedulaClave);
-        if (idx == -1) return false;
-
-        if (nuevoCorreo != null) {
-            for (int i=0;i<bd.length;i++){
-                if (i==idx || bd[i]==null || esVacio(bd[i])) continue;
-                if (strEqIgnoreCase(bd[i].correo, nuevoCorreo)) return false;
+    public static boolean existeCorreo(Usuario[] usuarios, String correo) {
+        for (int i = 0; i < usuarios.length; i++) {
+            if (usuarios[i] != null && usuarios[i].getCorreo().equalsIgnoreCase(correo)) {
+                return true;
             }
-            bd[idx].correo = nuevoCorreo;
         }
-        
-         if (nuevoNombre != null)      bd[idx].nombre = nuevoNombre;
-        if (nuevoPeso != null)        bd[idx].peso = nuevoPeso.doubleValue();
-        if (nuevoTelefono != null)    bd[idx].telefono = nuevoTelefono;
-        if (nuevaContrasena != null)  bd[idx].contrasena = nuevaContrasena;
-        if (nuevoActivo != null)      bd[idx].activo = nuevoActivo.booleanValue();
-        return true;
+        return false;
     }
     
-    public static Usuario login(Usuario[] bd, String usuario, String pass) {
-        if (bd == null || usuario == null || pass == null) return null;
-        for (int i=0;i<bd.length;i++) {
-            Usuario u = bd[i];
-            if (u == null || esVacio(u) || !u.activo) continue;
-            boolean idOk = strEq(u.cedula, usuario) || strEqIgnoreCase(u.correo, usuario);
-            if (idOk && strEq(u.contrasena, pass)) return u;
+    public static boolean registrar(Usuario[] usuarios, Usuario nuevo) {
+        if (existeCedula(usuarios, nuevo.getCedula())) return false;
+        if (existeCorreo(usuarios, nuevo.getCorreo())) return false;
+
+        for (int i = 0; i < usuarios.length; i++) {
+            if (usuarios[i] == null) {
+                usuarios[i] = nuevo;
+                return true;
+            }
         }
-        return null;
+        return false; 
+    }
+        
+    public static boolean editar(Usuario[] usuarios, String cedula,
+                                 String nuevoNombre, Double nuevoPeso,
+                                 String nuevoTelefono, String nuevoCorreo,
+                                 String nuevaContrasena, Integer nuevaEdad,
+                                 Boolean nuevoActivo) {
+        for (int i = 0; i < usuarios.length; i++) {
+            Usuario u = usuarios[i];
+            if (u != null && u.getCedula().equals(cedula)) {
+
+                if (nuevoCorreo != null && !nuevoCorreo.equalsIgnoreCase(u.getCorreo())) {
+                    if (existeCorreo(usuarios, nuevoCorreo)) return false;
+                    u.setCorreo(nuevoCorreo);
+                }
+
+                if (nuevoNombre != null) u.setNombre(nuevoNombre);
+                if (nuevoPeso   != null && nuevoPeso.doubleValue() > 0) u.setPeso(nuevoPeso.doubleValue());
+                if (nuevoTelefono != null) u.setTelefono(nuevoTelefono);
+                if (nuevaContrasena != null) u.setContrasena(nuevaContrasena);
+                if (nuevaEdad != null && nuevaEdad.intValue() >= 0) u.setEdad(nuevaEdad.intValue());
+                if (nuevoActivo != null) u.setActivo(nuevoActivo.booleanValue());
+
+                return true;
+            }
+        }
+        return false; 
+    }
+    
+    public static boolean login(Usuario[] usuarios, String usuario, String pass) {
+        for (int i = 0; i < usuarios.length; i++) {
+            Usuario u = usuarios[i];
+            if (u != null && u.isActivo()) {
+                boolean usuarioOk = u.getCedula().equals(usuario) || u.getCorreo().equalsIgnoreCase(usuario);
+                boolean passOk = u.getContrasena().equals(pass);
+                if (usuarioOk && passOk) return true;
+            }
+        }
+        return false;
     }
     
     public String resumen() {
-        return "Ced: " + cedula + " | Nom: " + nombre + " | Tel: " + telefono +
-               " | Correo: " + correo + " | Activo: " + activo;
+        return "Cédula: " + cedula + " | Nombre: " + nombre + " | Tel: " + telefono +
+               " | Correo: " + correo + " | Peso: " + peso + " | Edad: " + edad +
+               " | Activo: " + activo;
     }
-} 
+}
