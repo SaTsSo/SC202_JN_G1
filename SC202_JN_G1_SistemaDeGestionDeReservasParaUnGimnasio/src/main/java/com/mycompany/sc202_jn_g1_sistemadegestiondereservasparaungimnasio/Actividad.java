@@ -4,6 +4,8 @@
  */
 package com.mycompany.proyecto;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author matia
@@ -14,6 +16,7 @@ public class Actividad {
     private int duracionClase; 
     private String horarioClase;
 
+    // Constructor
     public Actividad(String nombreActividad, int idClases, int duracionClase, String horarioClase) {
         this.nombreActividad = nombreActividad;
         this.idClases = idClases;
@@ -21,7 +24,7 @@ public class Actividad {
         this.horarioClase = horarioClase;
     }
 
-
+    // Getters y Setters
     public String getNombreActividad() {
         return nombreActividad;
     }
@@ -54,27 +57,16 @@ public class Actividad {
         this.horarioClase = horarioClase;
     }
 
-    public void crearClase(String nombreActividad, int idClases, int duracionClase, String horarioClase) {
-        this.nombreActividad = nombreActividad;
-        this.idClases = idClases;
-        this.duracionClase = duracionClase;
-        this.horarioClase = horarioClase;
-        System.out.println("Clase creada exitosamente.");
-    }
-
-    public void editarClase(String nombreActividad, int duracionClase, String horarioClase) {
-        this.nombreActividad = nombreActividad;
-        this.duracionClase = duracionClase;
-        this.horarioClase = horarioClase;
-        System.out.println("Clase editada exitosamente.");
-    }
-
-    public void eliminarClase() {
-        this.nombreActividad = "";
-        this.idClases = 0;
-        this.duracionClase = 0;
-        this.horarioClase = "";
-        System.out.println("Clase eliminada exitosamente.");
+    // Método para mostrar la información de la clase
+    public void mostrarClase() {
+        JOptionPane.showMessageDialog(null,
+            "ID: " + idClases +
+            "\nNombre: " + nombreActividad +
+            "\nDuración: " + duracionClase + " minutos" +
+            "\nHorario: " + horarioClase,
+            "Información de la Clase",
+            JOptionPane.INFORMATION_MESSAGE);
     }
 }
+
 
