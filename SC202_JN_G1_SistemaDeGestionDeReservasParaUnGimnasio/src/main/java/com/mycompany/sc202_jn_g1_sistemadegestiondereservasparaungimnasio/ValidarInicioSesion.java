@@ -18,7 +18,7 @@ public class ValidarInicioSesion {
         this.usuariosRegistrados = usuariosRegistrados;
     }
     
-    public boolean validarCredenciales (){
+    public void validarCredenciales (){
         boolean correcto = false;
         int intento = 0;
         
@@ -42,10 +42,7 @@ public class ValidarInicioSesion {
                     System.exit(0);
                 }
             }
-            
-            
-            return correcto;
-        } while (intento == 3);
+        } while (intento == 3 || correcto == false);
     }
     
 }

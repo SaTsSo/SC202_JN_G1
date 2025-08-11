@@ -11,12 +11,22 @@ import javax.swing.JOptionPane;
  * @author samim
  */
 public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
-    //Agregado por Jimena - para la clase usuario
     public static Usuario [] usuarios = new Usuario [10];
 
     public static void main(String[] args) {
         
+        //Importar clase Horario
+        Horario[] horarios = new Horario[10];
+        horarios[0] = new Horario ("10/09/2025", "06:00",  "07:00", "Crossfit");
+        horarios[1] = new Horario ("10/09/2025", "07:00",  "08:00", "Spinning");
+        horarios[2] = new Horario ("10/09/2025", "08:00",  "09:00", "Zumba");
+        horarios[3] = new Horario ("10/09/2025", "09:00",  "10:00", "Yoga");
+        horarios[4] = new Horario ("10/09/2025", "10:00",  "11:00", "Crossfit");
+        horarios[5] = new Horario ("10/09/2025", "11:00",  "12:00", "Yoga");
+        horarios[6] = new Horario ("10/09/2025", "12:00",  "13:00", "Zumba");
+        horarios[7] = new Horario ("10/09/2025", "13:00",  "14:00", "Spinning");
         
+        //Creacion de usuarios
         usuarios [0] = new Usuario ("111111111", "samuel", 83.1, "19999999","samuel@prueba.com", "tsai", 22);
         usuarios [1] = new Usuario ("222222222", "matias", 74.2, "28888888","matias@prueba.com", "Cabalceta", 18);
         usuarios [2] = new Usuario ("333333333", "santiago", 65.3, "37777777","santiago@prueba.com", "paniagua", 19);
@@ -24,6 +34,16 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
         for (int i=4;i<usuarios.length;i++) {
             usuarios[i] = new Usuario("1","vacio",1.1,"1","vacio@prueba.com","vacio",1);
         }
+        
+        //Importar clase Actividad
+        Actividad[] actividades = new Actividad[4];
+        actividades[0] = new Actividad ("Yoga", 1, 60, "L - K - S");
+        actividades[1] = new Actividad ("Spinning", 2, 120, "M - K");
+        actividades[2] = new Actividad ("Zumba", 3, 90, "L - S - D");
+        actividades[3] = new Actividad ("Crossfit", 4, 60, "V - S");
+        
+        //Importar clase Reserva
+        Reserva[] reservas = new Reserva[10];
         
         //Inicio de sesion
         ValidarInicioSesion validarInicioSesion = new ValidarInicioSesion(usuarios);
@@ -38,7 +58,7 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
             mensajePrincipal += "******************************************\n\n";
             mensajePrincipal += "Por favor ingrese el numero de la accion que desea realizar:\n";
             mensajePrincipal += "1. Gestion de usuarios.\n";
-            mensajePrincipal += "2. Seleccion de actividades.\n";
+            mensajePrincipal += "2. Mostar de actividades.\n";
             mensajePrincipal += "3. Horarios disponibles.\n";
             mensajePrincipal += "4. Gestion de reservas.\n";
             mensajePrincipal += "5. Salir.";
@@ -89,135 +109,19 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
                         break;
 
                     case 2:
-                        String mensajeActividades = "";
-                        mensajeActividades += "****************************\n";
-                        mensajeActividades += "Seleccion de Actividades";
-                        mensajeActividades += "****************************\n\n";
-                        mensajeActividades += "Por favor ingrese el numero de la actividad que desea seleccionar:\n";
-                        mensajeActividades += "1. Yoga.\n";
-                        mensajeActividades += "2. Spinning.\n";
-                        mensajeActividades += "3. Zumba.\n";
-                        mensajeActividades += "4. Crossfit.\n";
-                        mensajeActividades += "5. Regresar.";
-
-                        int seleccionActividades = 0;
-                        String actividad = "";
-                        do {
-                            seleccionActividades = Integer.parseInt(JOptionPane.showInputDialog(mensajeActividades));
-
-                            switch (seleccionActividades) {
-                                case 1:
-                                    actividad = "Yoga";
-                                    JOptionPane.showMessageDialog(null, "La actividad '" + actividad + "' se ha guardado correctamente\nRegresando...");
-                                    break;
-
-                                case 2:
-                                    actividad = "Spinning";
-                                    JOptionPane.showMessageDialog(null, "La actividad '" + actividad + "' se ha guardado correctamente\nRegresando...");
-                                    break;
-
-                                case 3:
-                                    actividad = "Zumba";
-                                    JOptionPane.showMessageDialog(null, "La actividad '" + actividad + "' se ha guardado correctamente\nRegresando...");
-                                    break;
-
-                                case 4:
-                                    actividad = "Crossfit";
-                                    JOptionPane.showMessageDialog(null, "La actividad '" + actividad + "' se ha guardado correctamente\nRegresando...");
-                                    break;
-                                
-                                case 5:
-                                    JOptionPane.showMessageDialog(null, "Regresando...");
-                                    break;    
-                                
-                                default:
-                                    JOptionPane.showMessageDialog(null, "La opcion ingresada es incorrecta, por favor intente de nuevo.");
-                                    break;
-                            }
-
-                        } while (seleccionActividades <= 0 || seleccionActividades >= 6);
-                        
+                        for (int i = 0; i < actividades.length; i++){
+                            actividades[i].mostrarClase();
+                        }
                         break;
 
                     case 3:
-                        String mensajeHorario = "";
-                        mensajeHorario += "****************************\n";
-                        mensajeHorario += "Horarios disponibles\n";
-                        mensajeHorario += "****************************\n\n";
-                        mensajeHorario += "\n";
-
-                        JOptionPane.showMessageDialog(null, mensajeHorario);
-                        
                         //MOSTRAR LOS HORARIOS
-
+                        Horario.menuHorarios(horarios);
                         break;
 
                     case 4:
-                        String mensajeReserva = "";
-                        mensajeReserva += "****************************\n";
-                        mensajeReserva += "Gestion de reservas\n";
-                        mensajeReserva += "****************************\n\n";
-                        mensajeReserva += "Por favor ingrese el numero de la accion que desea realizar:\n";
-                        mensajeReserva += "1. Confirmar reserva.\n";
-                        mensajeReserva += "2. Cacelar seleccion\n";
-                        mensajeReserva += "3. Consultar historial\n";
-                        mensajeReserva += "4. Regresar.";
-                        
-                        int seleccionReserva = 0;
-                        int confirmacion = 0;
-                        int idReservacion = 0;
-                        
-                        do {
-                            seleccionReserva = Integer.parseInt(JOptionPane.showInputDialog(mensajeReserva));
-                            
-                            switch (seleccionReserva) {
-                                case 1:
-                                    do{
-                                        confirmacion = Integer.parseInt(JOptionPane.showInputDialog("A continuacion digite el numero:\n1 para confirmar la reservacion.\n2 para regresar."));
-
-                                        switch (confirmacion) {
-                                            case 1:
-                                                //REALIZAR CONFIRMACION
-                                                JOptionPane.showMessageDialog(null, "Reservacion confirmada");//MOSTRAR ID DE RESERVACION
-                                                break;
-                                            
-                                            case 2:
-                                                JOptionPane.showMessageDialog(null, "Regresando...");
-                                                break;
-                                            
-                                            default:
-                                                JOptionPane.showMessageDialog(null, "La opcion ingresada es incorrecta, por favor intente de nuevo.");
-                                                break;
-                                        }   
-                                    }while (seleccionReserva <= 0 || seleccionReserva >= 5);
-                                    
-                                    break;
-                                    
-                                case 2:
-                                    idReservacion = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el numero de ID de la reservacion que desea cancelar: "));
-                                    
-                                    //BUSCAR ID
-                                    //ELIMINAR RESERVA
-                                    
-                                    JOptionPane.showMessageDialog(null, "Cancelacion realizada con exito.");
-                                    
-                                    break;
-                                    
-                                case 3:
-                                    JOptionPane.showMessageDialog(null, "*********************\nReservas realizadas\n*********************\n\n");
-                                    break;
-                                
-                                case 4:
-                                    JOptionPane.showMessageDialog(null, "Regresando...");
-                                    break;
-                                
-                                default:
-                                    JOptionPane.showMessageDialog(null, "La opcion ingresada es incorrecta, por favor intente de nuevo.");
-                                    break;
-                            }
-                        
-                        } while (seleccionReserva <= 0 || seleccionReserva >= 5);
-                        
+                        //Menu Reserva
+                        Reserva.menuReservas(reservas, usuarios, horarios);
                         break;
 
                     case 5:
@@ -234,6 +138,7 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
         } while (!salir);
     }
     
+    //Agregado por Jimena - para la clase usuario
     private static void menuPrincipal() {
     boolean salir = false;
     while (!salir) {

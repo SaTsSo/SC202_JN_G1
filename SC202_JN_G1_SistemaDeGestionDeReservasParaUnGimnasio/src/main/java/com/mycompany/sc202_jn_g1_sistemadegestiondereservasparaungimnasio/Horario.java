@@ -1,3 +1,4 @@
+package com.mycompany.sc202_jn_g1_sistemadegestiondereservasparaungimnasio;
 import javax.swing.JOptionPane;
 
 public class Horario {
@@ -12,7 +13,7 @@ public class Horario {
         this.horaFin = horaFin;
         this.actividad = actividad;
     }
-
+    
     public String getDia() { return dia; }
     public void setDia(String dia) { this.dia = dia; }
 

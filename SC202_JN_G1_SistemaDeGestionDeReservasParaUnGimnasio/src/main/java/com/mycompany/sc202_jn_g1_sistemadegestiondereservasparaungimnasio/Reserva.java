@@ -1,5 +1,6 @@
+package com.mycompany.sc202_jn_g1_sistemadegestiondereservasparaungimnasio;
 import javax.swing.JOptionPane;
-/*
+
 public class Reserva {
     private static int contadorReservas = 1;
     private final int idReserva;
@@ -121,5 +122,3 @@ public class Reserva {
         }
     }
 }
-
-*/
