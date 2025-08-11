@@ -30,7 +30,7 @@ public class ValidarInicioSesion {
             for (int i = 0; i < usuariosRegistrados.length; i++) {
                 if (usuariosRegistrados[i].getCorreo().equals(correo) && usuariosRegistrados[i].getContrasena().equals(contrasena)) {
                     correcto = true;
-                    JOptionPane.showMessageDialog(null, "Inicio de sesion correcto!\nVienvenido " + usuariosRegistrados[i].getNombre());
+                    JOptionPane.showMessageDialog(null, "Inicio de sesion correcto!\nBienvenid@ " + usuariosRegistrados[i].getNombre());
                 }
             }
             

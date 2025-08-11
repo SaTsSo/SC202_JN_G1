@@ -124,13 +124,18 @@ public class Usuario {
         if (existeCorreo(usuarios, nuevo.getCorreo())) return false;
 
         for (int i = 0; i < usuarios.length; i++) {
-            if (usuarios[i] == null) {
-                usuarios[i] = nuevo;
-                return true;
-            }
+        boolean slotVacio = (usuarios[i] != null) &&
+                            usuarios[i].getCedula().equals("1") &&
+                            usuarios[i].getNombre() != null &&
+                            usuarios[i].getNombre().equals("vacio");
+
+        if (usuarios[i] == null || slotVacio) {
+            usuarios[i] = nuevo;
+            return true;
         }
-        return false; 
     }
+    return false; 
+}
         
     public static boolean editar(Usuario[] usuarios, String cedula,
                                  String nuevoNombre, Double nuevoPeso,

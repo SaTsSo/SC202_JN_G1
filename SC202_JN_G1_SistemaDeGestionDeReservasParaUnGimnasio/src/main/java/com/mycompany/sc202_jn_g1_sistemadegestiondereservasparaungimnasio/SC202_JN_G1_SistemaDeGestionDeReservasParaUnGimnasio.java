@@ -138,7 +138,7 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
         } while (!salir);
     }
     
-    //Agregado por Jimena - para la clase usuario
+    
     private static void menuPrincipal() {
     boolean salir = false;
     while (!salir) {
