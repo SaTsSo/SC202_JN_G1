@@ -27,10 +27,10 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
         horarios[7] = new Horario ("10/09/2025", "13:00",  "14:00", "Spinning");
         
         //Creacion de usuarios
-        usuarios [0] = new Usuario ("111111111", "samuel", 83.1, "19999999","samuel@prueba.com", "tsai", 22);
-        usuarios [1] = new Usuario ("222222222", "matias", 74.2, "28888888","matias@prueba.com", "Cabalceta", 18);
-        usuarios [2] = new Usuario ("333333333", "santiago", 65.3, "37777777","santiago@prueba.com", "paniagua", 19);
-        usuarios [3] = new Usuario ("444444444", "jimena", 60.4, "466666666","jimena@prueba.com", "lopez", 20);
+        usuarios [0] = new Usuario ("111111111", "samuel", 83.1, "19999999","samuel@superfit.com", "tsai", 22);
+        usuarios [1] = new Usuario ("222222222", "matias", 74.2, "28888888","matias@superfit.com", "Cabalceta", 18);
+        usuarios [2] = new Usuario ("333333333", "santiago", 65.3, "37777777","santiago@superfit.com", "paniagua", 19);
+        usuarios [3] = new Usuario ("444444444", "jimena", 60.4, "466666666","jimena@superfit.com", "lopez", 20);
         for (int i=4;i<usuarios.length;i++) {
             usuarios[i] = new Usuario("1","vacio",1.1,"1","vacio@prueba.com","vacio",1);
         }
