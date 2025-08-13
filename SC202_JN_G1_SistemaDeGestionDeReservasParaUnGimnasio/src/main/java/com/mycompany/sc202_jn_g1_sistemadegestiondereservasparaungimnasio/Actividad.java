@@ -16,7 +16,6 @@ public class Actividad {
     private int duracionClase; 
     private String horarioClase;
 
-    // Constructor
     public Actividad(String nombreActividad, int idClases, int duracionClase, String horarioClase) {
         this.nombreActividad = nombreActividad;
         this.idClases = idClases;
@@ -24,7 +23,6 @@ public class Actividad {
         this.horarioClase = horarioClase;
     }
 
-    // Getters y Setters
     public String getNombreActividad() {
         return nombreActividad;
     }
@@ -57,7 +55,6 @@ public class Actividad {
         this.horarioClase = horarioClase;
     }
 
-    // Método para mostrar la información de la clase
     public void mostrarClase() {
         JOptionPane.showMessageDialog(null,
             "ID: " + idClases +
