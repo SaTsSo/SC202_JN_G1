@@ -11,6 +11,8 @@ import javax.swing.JOptionPane;
  * @author samim
  */
 public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
+    // Arreglo que actúa como "base de datos" en memoria
+
     public static Usuario [] usuarios = new Usuario [10];
 
     public static void main(String[] args) {
@@ -26,11 +28,11 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
         horarios[6] = new Horario ("10/09/2025", "12:00",  "13:00", "Zumba");
         horarios[7] = new Horario ("10/09/2025", "13:00",  "14:00", "Spinning");
         
-        //Creacion de usuarios
-        usuarios [0] = new Usuario ("111111111", "samuel", 83.1, "19999999","samuel@superfit.com", "tsai", 22);
-        usuarios [1] = new Usuario ("222222222", "matias", 74.2, "28888888","matias@superfit.com", "Cabalceta", 18);
-        usuarios [2] = new Usuario ("333333333", "santiago", 65.3, "37777777","santiago@superfit.com", "paniagua", 19);
-        usuarios [3] = new Usuario ("444444444", "jimena", 60.4, "466666666","jimena@superfit.com", "lopez", 20);
+        //Creacion de usuarios Precargados  + espacios vacios para agregar los usuarios nuevos 
+        usuarios [0] = new Usuario ("111111111", "Samuel", 83.1, "19999999","samuel@superfit.com", "tsai", 22);
+        usuarios [1] = new Usuario ("222222222", "Matias", 74.2, "28888888","matias@superfit.com", "Cabalceta", 18);
+        usuarios [2] = new Usuario ("333333333", "Santiago", 65.3, "37777777","santiago@superfit.com", "paniagua", 19);
+        usuarios [3] = new Usuario ("444444444", "Jimena", 60.4, "466666666","jimena@superfit.com", "lopez", 20);
         for (int i=4;i<usuarios.length;i++) {
             usuarios[i] = new Usuario("1","vacio",1.1,"1","vacio@prueba.com","vacio",1);
         }
@@ -58,7 +60,7 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
             mensajePrincipal += "******************************************\n\n";
             mensajePrincipal += "Por favor ingrese el numero de la accion que desea realizar:\n";
             mensajePrincipal += "1. Gestion de usuarios.\n";
-            mensajePrincipal += "2. Mostar de actividades.\n";
+            mensajePrincipal += "2. Clases disponibles.\n";
             mensajePrincipal += "3. Horarios disponibles.\n";
             mensajePrincipal += "4. Gestion de reservas.\n";
             mensajePrincipal += "5. Salir.";
@@ -67,7 +69,7 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
 
             do {
                 seleccionMenuPrincipal = Integer.parseInt(JOptionPane.showInputDialog(mensajePrincipal));
-
+                
                 switch (seleccionMenuPrincipal) {
                     case 1:
                         //Menu opcion #1
@@ -165,7 +167,7 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
         }
     }
 }
-
+    // Metodo de registro //
 private static void registrarUI() {
     String ced = JOptionPane.showInputDialog("Cédula:");
     if (vacio(ced)) return;
@@ -215,7 +217,7 @@ private static void registrarUI() {
         JOptionPane.showMessageDialog(null, "No se pudo registrar (duplicado o sin espacio).");
     }
 }
-
+    //Metodo para editar el usuario//
 private static void editarUI() {
     String ced = JOptionPane.showInputDialog("Cédula del usuario a editar:");
     if (vacio(ced)) return;
@@ -274,7 +276,7 @@ private static void editarUI() {
         JOptionPane.showMessageDialog(null, "No se pudo editar (correo duplicado u otro problema).");
     }
 }
-
+    //Metodo para loguearse correctamente//
 private static void loginUI() {
     String user = JOptionPane.showInputDialog("Usuario (cédula o correo):");
     if (vacio(user)) return;
@@ -290,11 +292,12 @@ private static void loginUI() {
         JOptionPane.showMessageDialog(null, "Login fallido.");
     }
 }
-
+  //Metodo vacio // Comprueba si el texto que se escribe es vacio o si preciono cancelar
 private static boolean vacio(String s) {
     return s == null || s.length() == 0;
 }
 
+// Metodo que convierte texto en numero entero int 
 private static int parseInt(String s, int def) {
     try {
         return Integer.parseInt(s);
@@ -303,6 +306,7 @@ private static int parseInt(String s, int def) {
     }
 }
 
+    // Metodo que convierto texto a numeros pero decimales para evitar que el codigo se rompa si se agrega un texto enves de numero
 private static double parseDouble(String s, double def) {
     try {
         return Double.parseDouble(s);

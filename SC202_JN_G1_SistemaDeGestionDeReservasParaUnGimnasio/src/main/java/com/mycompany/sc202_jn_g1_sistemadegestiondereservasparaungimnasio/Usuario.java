@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
  * @author XPC
  */
 public class Usuario {
+    //Atributos
     private String cedula;
     private String nombre;
     private double peso;
@@ -19,7 +20,7 @@ public class Usuario {
     private int edad;
     private boolean activo = true;
 
-
+    // Constructores
     public Usuario(String cedula, String nombre, double peso, String telefono, String correo, String contrasena, int edad) {
         this.cedula = cedula;
         this.nombre = nombre;
@@ -29,7 +30,7 @@ public class Usuario {
         this.contrasena = contrasena;
         this.edad = edad;
     }
-
+    //Getters-Setters
     public String getCedula() {
         return cedula;
     }
@@ -93,23 +94,26 @@ public class Usuario {
     public void setActivo (boolean activo) {
     this.activo = activo;
     }
-
+    //Metodo que detecta si un elemento es vacio
+    
     private static boolean esVacio(Usuario u) {
         return u != null
             && "1".equals(u.getCedula())
             && u.getNombre() != null
             && u.getNombre().equalsIgnoreCase("vacio");
     }
+    //Metodo para verificar si existe la cedula del usuario
     
     public static boolean existeCedula(Usuario[] usuarios, String cedula) {
         for (int i = 0; i < usuarios.length; i++) {
             if (usuarios[i] != null && usuarios[i].getCedula().equals(cedula)) {
                 return true;
             }
-        }
+        } //Si no exite retorna false
         return false;
     }
     
+    // Metodo verificar si existe correo
     public static boolean existeCorreo(Usuario[] usuarios, String correo) {
         for (int i = 0; i < usuarios.length; i++) {
             if (usuarios[i] != null && usuarios[i].getCorreo().equalsIgnoreCase(correo)) {
@@ -119,6 +123,7 @@ public class Usuario {
         return false;
     }
     
+    // Metodo para registrar usuario en el primer espacio libre
     public static boolean registrar(Usuario[] usuarios, Usuario nuevo) {
         if (existeCedula(usuarios, nuevo.getCedula())) return false;
         if (existeCorreo(usuarios, nuevo.getCorreo())) return false;
@@ -134,9 +139,9 @@ public class Usuario {
             return true;
         }
     }
-    return false; 
+    return false; // Sin espacio
 }
-        
+        // Metodo que edita por cedula 
     public static boolean editar(Usuario[] usuarios, String cedula,
                                  String nuevoNombre, Double nuevoPeso,
                                  String nuevoTelefono, String nuevoCorreo,
@@ -145,6 +150,8 @@ public class Usuario {
         for (int i = 0; i < usuarios.length; i++) {
             Usuario u = usuarios[i];
             if (u != null && u.getCedula().equals(cedula)) {
+                
+               // Si piden cambiar correo, validamos que no exista en otro usuario
 
                 if (nuevoCorreo != null && !nuevoCorreo.equalsIgnoreCase(u.getCorreo())) {
                     if (existeCorreo(usuarios, nuevoCorreo)) return false;
@@ -161,9 +168,10 @@ public class Usuario {
                 return true;
             }
         }
-        return false; 
+        return false; // no se encontró la cédula
     }
     
+    // Metodo para loguearse / Acepta cedula o correo + contrasena
     public static boolean login(Usuario[] usuarios, String usuario, String pass) {
         for (int i = 0; i < usuarios.length; i++) {
             Usuario u = usuarios[i];
