@@ -17,7 +17,7 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
 
     public static void main(String[] args) {
         
-        //Importar clase Horario
+        //Creacion del objeto y utilizacion de la clase Horario
         Horario[] horarios = new Horario[10];
         horarios[0] = new Horario ("10/09/2025", "06:00",  "07:00", "Crossfit");
         horarios[1] = new Horario ("10/09/2025", "07:00",  "08:00", "Spinning");
@@ -37,14 +37,14 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
             usuarios[i] = new Usuario("1","vacio",1.1,"1","vacio@prueba.com","vacio",1);
         }
         
-        //Importar clase Actividad
+        //Creacion del objeto y utilizacion de la clase Actividad
         Actividad[] actividades = new Actividad[4];
         actividades[0] = new Actividad ("Yoga", 1, 60, "L - K - S");
         actividades[1] = new Actividad ("Spinning", 2, 120, "M - K");
         actividades[2] = new Actividad ("Zumba", 3, 90, "L - S - D");
         actividades[3] = new Actividad ("Crossfit", 4, 60, "V - S");
         
-        //Importar clase Reserva
+        //Creacion del objeto y utilizacion de la clase Reserva
         Reserva[] reservas = new Reserva[10];
         
         //Inicio de sesion
@@ -53,7 +53,6 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
         boolean salir = false;
         do {
             //Menu principal
-
             String mensajePrincipal = "";
             mensajePrincipal += "******************************************\n";
             mensajePrincipal += "¡Bienvenido al Gimnasio Super Fit!\n";
@@ -89,7 +88,7 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
 
                             switch (seleccionGestionUsuario) {
                                 case 1:
-                                    //CREAR OBJETO
+                                    //Crear objeto
                                     registrarUI();
                                     break;
                                 
@@ -99,10 +98,12 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
                                     break;
 
                                 case 3:
+                                    //Regresar al menu principal
                                     JOptionPane.showMessageDialog(null, "Regresando...");
                                     break;
 
                                 default:
+                                    //Condicion si el numero ingresado es incorrecto
                                     JOptionPane.showMessageDialog(null, "La opcion ingresada es incorrecta, por favor intente de nuevo.");
                                     break;
                             }
@@ -111,36 +112,43 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
                         break;
 
                     case 2:
+                        //Ciclo for para listar las actividades del programa
                         for (int i = 0; i < actividades.length; i++){
                             actividades[i].mostrarClase();
                         }
                         break;
 
                     case 3:
-                        //MOSTRAR LOS HORARIOS
+                        //Mostrar los horarios disponibles
                         Horario.menuHorarios(horarios);
                         break;
 
                     case 4:
                         //Menu Reserva
+                        //Se envia como parametros los objetos "reservas", "usuarios" y "horarios"
                         Reserva.menuReservas(reservas, usuarios, horarios);
                         break;
 
                     case 5:
+                        //Opcion si el usuario quiere salir
                         JOptionPane.showMessageDialog(null, "¡Muchas gracias, vuelva pronto!\nSaliendo...");
+                        //Se establece la variable salir como verdadera para poder salir
                         salir = true;
                         break;
 
                     default:
+                        //Condicion si el numero ingresado es incorrecto
                         JOptionPane.showMessageDialog(null, "La opcion ingresada es incorrecta, por favor intente de nuevo.");
                         break;
                 }
+            //Ciclo while que se repite mientras las opciones ingresadas son validas
             } while (seleccionMenuPrincipal <= 0 || seleccionMenuPrincipal >= 6);
-
+            
+        //Ciclo while que se repite mientras la variable salir sea falsa
         } while (!salir);
     }
     
-    
+    //Metodo "Menu Principal"
     private static void menuPrincipal() {
     boolean salir = false;
     while (!salir) {
@@ -167,7 +175,8 @@ public class SC202_JN_G1_SistemaDeGestionDeReservasParaUnGimnasio {
         }
     }
 }
-    // Metodo de registro //
+    
+// Metodo de registro de usuarios
 private static void registrarUI() {
     String ced = JOptionPane.showInputDialog("Cédula:");
     if (vacio(ced)) return;
